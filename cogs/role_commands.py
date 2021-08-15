@@ -15,7 +15,7 @@ class role_commands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('bot is ready')
+        print('roles ready')
 
     # Commands
     

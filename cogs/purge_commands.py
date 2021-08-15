@@ -15,7 +15,7 @@ class purge_commands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('bot is ready')
+        print('purge ready')
 
     # Commands
     
