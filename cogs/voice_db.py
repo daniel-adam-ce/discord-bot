@@ -43,19 +43,27 @@ class voice_db(commands.Cog):
         elif after.channel == None and before.channel != None: 
             cur.execute('SELECT anon_id FROM users WHERE discord_id = %s', (member.id, ))
             a_id = cur.fetchone()[0]
-            query = sql.SQL('SELECT row_id, start_time FROM {table} ORDER BY row_id DESC LIMIT 1').format(table = sql.Identifier(f'user_{a_id}'))
-            cur.execute(query)
 
-            row_start = cur.fetchone()
-            time = datetime.now()
-            query = sql.SQL('UPDATE {table} SET end_time = %s, duration = %s WHERE row_id = %s').format(table = sql.Identifier(f'user_{a_id}'))
-            cur.execute(query, (time, time - row_start[1], row_start[0]))
-            query = sql.SQL('SELECT SUM (duration) AS total FROM {table}').format(table = sql.Identifier(f'user_{a_id}'))
+            query = sql.SQL('SELECT count(*) FROM {table}').format(table = sql.Identifier(f'user_{a_id}'))
             cur.execute(query)
+            num = cur.fetchone()[0]
+            print(num)
+            if num > 0:
 
-            total = cur.fetchone()
-            query = sql.SQL('UPDATE users SET total_time = %s WHERE anon_id = %s')
-            cur.execute(query, (total, a_id))
+                query = sql.SQL('SELECT row_id, start_time, end_time FROM {table} ORDER BY row_id DESC LIMIT 1').format(table = sql.Identifier(f'user_{a_id}'))
+                cur.execute(query)
+
+                row_start = cur.fetchone()
+                if row_start[2] == None:
+                    time = datetime.now()
+                    query = sql.SQL('UPDATE {table} SET end_time = %s, duration = %s WHERE row_id = %s').format(table = sql.Identifier(f'user_{a_id}'))
+                    cur.execute(query, (time, time - row_start[1], row_start[0]))
+                    query = sql.SQL('SELECT SUM (duration) AS total FROM {table}').format(table = sql.Identifier(f'user_{a_id}'))
+                    cur.execute(query)
+
+                    total = cur.fetchone()
+                    query = sql.SQL('UPDATE users SET total_time = %s WHERE anon_id = %s')
+                    cur.execute(query, (total, a_id))
 
         con.commit()
         cur.close()
