@@ -26,7 +26,6 @@ class role_commands(commands.Cog):
             await ctx.message.add_reaction('\u2705')
         else:
             await ctx.message.add_reaction('\u274c')
-            #await ctx.send('u dont got da powa bro')
 
     @commands.command()
     async def removeRole(self, ctx, role: discord.Role, user: discord.Member):
@@ -36,7 +35,6 @@ class role_commands(commands.Cog):
             await ctx.message.add_reaction('\u2705')
         else:
             await ctx.message.add_reaction('\u274c')
-            #await ctx.send('u dont go da powa bro')
 
 
 def setup(client):
