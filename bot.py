@@ -6,6 +6,7 @@ import json
 # import youtube_dl
 import shutil
 
+from discord_slash import SlashCommand
 from discord.ext import commands   
 from discord.ext.commands import has_role
 from discord.utils import get
@@ -43,9 +44,7 @@ async def reload(ctx, extension):
     else:
         await ctx.message.add_reaction('\u274c')
 
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
+
 
 
 if os.path.exists('misc/config.json'):
@@ -55,4 +54,13 @@ if os.path.exists('misc/config.json'):
 
 token = data['token']
 
+
+slash = SlashCommand(client, sync_commands=True)
+# @slash.slash(name="test", description="This is just a test command, nothing more.", guild_ids=[203376646319767553])
+# async def test(ctx):
+#   await ctx.send(content="Hello World!")
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[:-3]}')
 client.run(token)

@@ -10,6 +10,7 @@ import datetime
 from discord.ext import commands   
 from discord.ext.commands import has_role
 from discord.utils import get
+from discord_slash import cog_ext
 from misc import connect
 
 class voice_db_commands(commands.Cog):
@@ -46,7 +47,7 @@ class voice_db_commands(commands.Cog):
             colour = discord.Colour.blurple(), 
         )
 
-        print(time, type(time))
+        # print(time, type(time))
         embed.set_author(name = 'Daniel Adam', icon_url = self.image_url)
         embed.add_field(name= "User", value=f'{user.mention}', inline=False)
         embed.add_field(name="Time Spent in Voice Channels", value=time, inline=False)
@@ -58,12 +59,13 @@ class voice_db_commands(commands.Cog):
     
     @commands.command()
     async def voiceCheckAll(self, ctx):
-        embed=discord.Embed (
-            title="Voice Data", 
-            description=f'Top 10 Users', 
-            colour = discord.Colour.blurple(), 
-            image = "misc/icon.png"
-        )
+        # embed=discord.Embed (
+        #     title="Voice Data", 
+        #     description=f'Top 10 Users', 
+        #     colour = discord.Colour.blurple(), 
+        #     image = "misc/icon.png"
+        # )
+        await ctx.send("this doesn't do anything right now")
 
 def setup(client):
     client.add_cog(voice_db_commands(client))
