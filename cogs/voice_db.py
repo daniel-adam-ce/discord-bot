@@ -2,9 +2,10 @@ import discord
 import random
 import asyncio
 import psycopg2
+
 from datetime import datetime
+import datetime
 from psycopg2 import sql
-from datetime import datetime
 from discord.ext import commands   
 from discord.ext.commands import has_role
 from discord.utils import get
@@ -36,9 +37,18 @@ class voice_db(commands.Cog):
             a_id = cur.fetchone()[0]
             cur.execute(sql.SQL('CREATE TABLE IF NOT EXISTS {} (row_id BIGSERIAL PRIMARY KEY, start_time TIMESTAMP NOT NULL, end_time TIMESTAMP, duration INTERVAL)').format(sql.Identifier(f'user_{a_id}')))
             
-            time = datetime.now()
-            query = sql.SQL('INSERT INTO {table} (start_time) VALUES (%s)').format(table = sql.Identifier(f'user_{a_id}'))
-            cur.execute(query, (time,))
+            query = sql.SQL('SELECT row_id, start_time, end_time FROM {table} ORDER BY row_id DESC LIMIT 1').format(table = sql.Identifier(f'user_{a_id}'))
+            cur.execute(query)
+            data = cur.fetchone()
+            if data != None and data[0] != None and data[1] != None and data[2] == None:
+                # print('yes', data)
+                time = datetime.datetime.now().replace(microsecond=0)
+                query = sql.SQL('UPDATE {table} SET start_time = %s WHERE row_id = %s').format(table = sql.Identifier(f'user_{a_id}'))
+                cur.execute(query, (time, data[0]))
+            else:
+                time = datetime.datetime.now().replace(microsecond=0)
+                query = sql.SQL('INSERT INTO {table} (start_time) VALUES (%s)').format(table = sql.Identifier(f'user_{a_id}'))
+                cur.execute(query, (time,))
 
         elif after.channel == None and before.channel != None: 
             cur.execute('SELECT anon_id FROM users WHERE discord_id = %s', (member.id, ))
@@ -47,22 +57,26 @@ class voice_db(commands.Cog):
                 a_id = a_id[0]
                 query = sql.SQL('SELECT count(*) FROM {table}').format(table = sql.Identifier(f'user_{a_id}'))
                 cur.execute(query)
-                num = cur.fetchone()[0]
+                num = cur.fetchone()
                 # print(num)
-                if num > 0:
-
+                if num != None:
                     query = sql.SQL('SELECT row_id, start_time, end_time FROM {table} ORDER BY row_id DESC LIMIT 1').format(table = sql.Identifier(f'user_{a_id}'))
                     cur.execute(query)
 
                     row_start = cur.fetchone()
                     if row_start[2] == None:
-                        time = datetime.now()
+                        time = datetime.datetime.now().replace(microsecond=0)
                         query = sql.SQL('UPDATE {table} SET end_time = %s, duration = %s WHERE row_id = %s').format(table = sql.Identifier(f'user_{a_id}'))
-                        cur.execute(query, (time, time - row_start[1], row_start[0]))
+                        duration = time - row_start[1]
+                        duration = duration - datetime.timedelta(microseconds=duration.microseconds)
+                        cur.execute(query, (time, duration, row_start[0]))
                         query = sql.SQL('SELECT SUM (duration) AS total FROM {table}').format(table = sql.Identifier(f'user_{a_id}'))
                         cur.execute(query)
 
-                        total = cur.fetchone()
+                        total = cur.fetchone()[0]
+
+                        # print(type(total), total)
+                        total = total - datetime.timedelta(microseconds=total.microseconds)
                         query = sql.SQL('UPDATE users SET total_time = %s WHERE anon_id = %s')
                         cur.execute(query, (total, a_id))
 

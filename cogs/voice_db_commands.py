@@ -4,7 +4,7 @@ import asyncio
 import psycopg2
 import json
 import os
-from datetime import datetime
+from datetime import date, datetime
 from psycopg2 import sql
 import datetime
 from discord.ext import commands   
@@ -33,15 +33,23 @@ class voice_db_commands(commands.Cog):
         
         con = connect.connect()
         cur = con.cursor()
-        query = 'SELECT total_time FROM users WHERE discord_id = %s'
+        query = 'SELECT total_time, first_record, anon_id FROM users WHERE discord_id = %s'
         cur.execute(query, (user.id,))
-        time = cur.fetchone()
-        if time != None:
-            time = time[0]
-            time = time - datetime.timedelta(microseconds=time.microseconds)
+        times = cur.fetchone()
+        total_time = 'N/A'
+        first_record = 'N/A'
+        average = 'N/A'
+        if times != None:
+            total_time = times[0]
+            first_record = times[1]
+            total_time = total_time - datetime.timedelta(microseconds=total_time.microseconds)
             # https://stackoverflow.com/questions/18470627/how-do-i-remove-the-microseconds-from-a-timedelta-object
-        else:
-            time = 'N/A'
+            a_id = times[2]
+            query = sql.SQL('SELECT count(*) from {table}').format(table = sql.Identifier(f'user_{a_id}'))
+            cur.execute(query)
+            num = cur.fetchone()[0]
+            average = total_time / num
+            average = average - datetime.timedelta(microseconds=average.microseconds)
         embed=discord.Embed (
             title="Voice Data", 
             colour = discord.Colour.blurple(), 
@@ -50,7 +58,9 @@ class voice_db_commands(commands.Cog):
         # print(time, type(time))
         embed.set_author(name = 'Daniel Adam', icon_url = self.image_url)
         embed.add_field(name= "User", value=f'{user.mention}', inline=False)
-        embed.add_field(name="Time Spent in Voice Channels", value=time, inline=False)
+        embed.add_field(name="Time Spent in Voice Channels", value=total_time, inline=False)
+        embed.add_field(name='Average Time Spend Per Session', value=f'{average}', inline = False)
+        embed.add_field(name="First record", value = f'{first_record} PST', inline = False)
 
         con.commit()
         cur.close()
@@ -70,5 +80,3 @@ class voice_db_commands(commands.Cog):
 def setup(client):
     client.add_cog(voice_db_commands(client))
 
-
-# https://cdn.discordapp.com/avatars/769067829403844648/ce370be164e7746872ae1e5e74af648d.webp?size=128
