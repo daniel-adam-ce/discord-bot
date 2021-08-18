@@ -79,17 +79,19 @@ class voice_db_commands_slash(commands.Cog):
                 query = sql.SQL((
                     "SELECT AVG(duration), PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY duration),"
                     "AVG(EXTRACT(HOUR FROM start_time)),"
-                    "PERCENTILE_DISC(0.5) WITHIN GROUP(ORDER BY EXTRACT(HOUR FROM start_time)) FROM {table} WHERE EXTRACT(HOUR FROM duration) >= 2"
+                    "PERCENTILE_DISC(0.5) WITHIN GROUP(ORDER BY EXTRACT(HOUR FROM start_time))" 
+                    "FROM {table} WHERE EXTRACT(MINUTE FROM duration) >=2" 
                 )).format(table = sql.Identifier(f'user_{a_id}'))
                 cur.execute(query)
                 num = cur.fetchone()
-                average_duration = num[0]
-                average_duration = average_duration - datetime.timedelta(microseconds=average_duration.microseconds)
-                median_duration = num[1]
-                median_duration = median_duration - datetime.timedelta(microseconds=median_duration.microseconds)
-                average_time_joined=num[2]
-                average_time_joined = round(average_time_joined, 1)
-                median_time_joined=num[3]
+                if num != None:
+                    average_duration = num[0]
+                    average_duration = average_duration - datetime.timedelta(microseconds=average_duration.microseconds)
+                    median_duration = num[1]
+                    median_duration = median_duration - datetime.timedelta(microseconds=median_duration.microseconds)
+                    average_time_joined=num[2]
+                    average_time_joined = round(average_time_joined, 1)
+                    median_time_joined=num[3]
             embed=discord.Embed (
                 title="Voice Data", 
                 colour = discord.Colour.blurple(), 
