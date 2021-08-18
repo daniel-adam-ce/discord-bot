@@ -1,11 +1,7 @@
 import discord
 import random
 import asyncio
-import os 
-import json
-# import youtube_dl
-import shutil
-
+import os, json
 from discord_slash import SlashCommand
 from discord.ext import commands   
 from discord.ext.commands import has_role

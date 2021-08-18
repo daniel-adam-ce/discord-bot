@@ -1,8 +1,5 @@
-import discord
-import random
-import asyncio
-import os
-import json
+
+import os, json
 from discord.ext import commands   
 from discord.ext.commands import has_role
 from discord.utils import get
@@ -31,7 +28,15 @@ class purge_commands_slash(commands.Cog):
     @cog_ext.cog_slash (
         name='purge', 
         description='Deletes messages',
-        guild_ids=[GUILD_ID]
+        guild_ids=[GUILD_ID],
+        options=[
+            create_option(
+                name = "num",
+                description= "Number of messages to delete",
+                option_type = 4,
+                required = True
+            )
+        ]
     )
     async def purge(self, ctx: SlashContext, num: int):
         # print('test')

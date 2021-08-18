@@ -1,13 +1,9 @@
-import discord
-import random
-import asyncio
-import datetime
-from discord.ext.commands.errors import CommandInvokeError
-import psycopg2
+
+import random, datetime
 from discord.ext import commands   
 from discord.ext.commands import has_role
-from discord.utils import get
 from misc import connect
+
 class monkey_commands(commands.Cog):
 
     def __init__(self, client):

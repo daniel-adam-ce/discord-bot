@@ -1,9 +1,4 @@
-import discord
-import random
-import asyncio
-import psycopg2
 
-from datetime import datetime
 import datetime
 from psycopg2 import sql
 from discord.ext import commands   

@@ -1,14 +1,4 @@
-import discord
-import random
-import asyncio
-import os
-import json
-from discord.ext import commands   
-from discord.ext.commands import has_role
-from discord.utils import get
-from discord_slash import cog_ext, SlashContext
-from discord_slash.utils.manage_commands import create_choice, create_option
-
+from discord.ext import commands 
 
 class purge_commands(commands.Cog):
 

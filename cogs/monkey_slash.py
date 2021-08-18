@@ -1,17 +1,10 @@
-from itertools import filterfalse
-import discord
-import random
-import asyncio
-import datetime
-import os, json
-from discord.ext.commands.errors import CommandInvokeError
-import psycopg2
+
+import random, datetime, os, json
 from discord_slash import cog_ext, SlashContext
-from discord.ext import commands   
-from discord.ext.commands import has_role
-from discord.utils import get
+from discord.ext import commands
 from misc import connect
 from discord_slash.utils.manage_commands import create_choice, create_option
+
 if os.path.exists('misc/config.json'):
     f = open('misc/config.json')
     data = json.load(f)

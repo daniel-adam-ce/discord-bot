@@ -1,16 +1,6 @@
-import discord
-import random
-import asyncio
-import psycopg2
-import json
-import os
-from datetime import date, datetime
+import discord, json, os, datetime
 from psycopg2 import sql
-import datetime
 from discord.ext import commands   
-from discord.ext.commands import has_role
-from discord.utils import get
-from discord_slash import cog_ext
 from misc import connect
 
 class voice_db_commands(commands.Cog):

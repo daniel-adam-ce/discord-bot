@@ -1,10 +1,5 @@
 import discord
-import random
-import asyncio
-
-from discord.ext import commands   
-from discord.ext.commands import has_role
-from discord.utils import get
+from discord.ext import commands 
 
 class role_commands(commands.Cog):
 
