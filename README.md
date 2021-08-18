@@ -5,6 +5,7 @@ The environment that was chosen was a private discord, where the data measured i
 Currently, users can use bot commands (both normal and slash** commands) to display their data from the database. In the future, the data may be available on a website hosted on github pages.
 
 Example output from a slash command: https://imgur.com/a/aLAmoHy
-\* https://www.psycopg.org/
+
+* https://www.psycopg.org/
 
 ** https://discord-py-slash-command.readthedocs.io/en/latest/
