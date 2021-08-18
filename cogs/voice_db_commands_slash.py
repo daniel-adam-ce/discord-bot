@@ -92,6 +92,13 @@ class voice_db_commands_slash(commands.Cog):
                     average_time_joined=num[2]
                     average_time_joined = round(average_time_joined, 1)
                     median_time_joined=num[3]
+                
+                query = sql.SQL("SELECT start_time FROM {table} ORDER BY start_time LIMIT 1").format(table = sql.Identifier(f'user_{a_id}'))
+                cur.execute(query)
+                time = cur.fetchone()
+                if time != None:
+                    first_record = time[0].replace(microsecond=0)
+
             embed=discord.Embed (
                 title="Voice Data", 
                 colour = discord.Colour.blurple(), 
