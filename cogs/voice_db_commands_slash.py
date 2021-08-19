@@ -60,7 +60,7 @@ class voice_db_commands_slash(commands.Cog):
         if option == "user":
             con = connect.connect()
             cur = con.cursor()
-            query = 'SELECT total_time, first_record, anon_id FROM users WHERE discord_id = %s'
+            query = 'SELECT total_time, anon_id FROM users WHERE discord_id = %s'
             cur.execute(query, (member.id,))
             times = cur.fetchone()
             total_time = 'N/A'
@@ -71,10 +71,9 @@ class voice_db_commands_slash(commands.Cog):
             median_time_joined = 'N/A'
             if times != None:
                 total_time = times[0]
-                first_record = times[1]
                 total_time = total_time - datetime.timedelta(microseconds=total_time.microseconds)
                 # https://stackoverflow.com/questions/18470627/how-do-i-remove-the-microseconds-from-a-timedelta-object
-                a_id = times[2]
+                a_id = times[1]
                 # query = sql.SQL('SELECT count(*) from {table}').format(table = sql.Identifier(f'user_{a_id}'))
                 query = sql.SQL((
                     "SELECT AVG(duration), PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY duration),"
@@ -90,8 +89,8 @@ class voice_db_commands_slash(commands.Cog):
                     median_duration = num[1]
                     median_duration = median_duration - datetime.timedelta(microseconds=median_duration.microseconds)
                     average_time_joined=num[2]
-                    average_time_joined = round(average_time_joined, 1)
-                    median_time_joined=num[3]
+                    average_time_joined = round(average_time_joined, 0)
+                    median_time_joined= num[3]
                 
                 query = sql.SQL("SELECT start_time FROM {table} ORDER BY start_time LIMIT 1").format(table = sql.Identifier(f'user_{a_id}'))
                 cur.execute(query)
