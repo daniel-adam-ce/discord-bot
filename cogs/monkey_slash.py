@@ -33,7 +33,21 @@ class monkey_commands_slash(commands.Cog):
                 name="option",
                 description="type show, add, or all",
                 option_type = 3,
-                required = True
+                required = True,
+                choices= [
+                    create_choice(
+                        name = "show",
+                        value = "show"
+                    ),
+                    create_choice(
+                        name = "add",
+                        value = "add"
+                    ), 
+                    create_choice(
+                        name = "all",
+                        value = "all"
+                    )
+                ]
             ),
             create_option(
                 name="link",
