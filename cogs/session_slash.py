@@ -18,14 +18,10 @@ class check_session_slash(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        
-    # Events
 
     @commands.Cog.listener()
     async def on_ready(self):
         print('help slash ready')
-
-    # Commands
     
     @cog_ext.cog_slash (
         name='session', 
