@@ -21,7 +21,7 @@ class check_session_slash(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('help slash ready')
+        print('session slash ready')
     
     @cog_ext.cog_slash (
         name='session', 
