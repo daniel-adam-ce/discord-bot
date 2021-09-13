@@ -37,7 +37,6 @@ class voice_db(commands.Cog):
             cur.execute(query)
             data = cur.fetchone()
             if data != None and data[0] != None and data[1] != None and data[2] == None:
-                # print('yes', data)
                 time = datetime.datetime.now().replace(microsecond=0)
                 query = sql.SQL('UPDATE {table} SET start_time = %s WHERE row_id = %s').format(table = sql.Identifier(f'user_{a_id}'))
                 cur.execute(query, (time, data[0]))
@@ -55,7 +54,6 @@ class voice_db(commands.Cog):
                 query = sql.SQL('SELECT count(*) FROM {table}').format(table = sql.Identifier(f'user_{a_id}'))
                 cur.execute(query)
                 num = cur.fetchone()
-                # print(num)
                 if num != None:
                     query = sql.SQL('SELECT row_id, start_time, end_time FROM {table} ORDER BY row_id DESC LIMIT 1').format(table = sql.Identifier(f'user_{a_id}'))
                     cur.execute(query)
@@ -71,8 +69,6 @@ class voice_db(commands.Cog):
                         cur.execute(query)
 
                         total = cur.fetchone()[0]
-
-                        # print(type(total), total)
                         total = total - datetime.timedelta(microseconds=total.microseconds)
                         query = sql.SQL('UPDATE users SET total_time = %s WHERE anon_id = %s')
                         cur.execute(query, (total, a_id))

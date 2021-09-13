@@ -45,12 +45,10 @@ class check_session_slash(commands.Cog):
                 query = 'SELECT anon_id FROM users WHERE discord_id = %s LIMIT 1'
                 cur.execute(query, (member.id,))
                 a_id = cur.fetchone()
-                #print(a_id)
                 if a_id != None:
                     query = sql.SQL('SELECT start_time FROM {table} ORDER BY start_time DESC LIMIT 1').format(table = sql.Identifier(f'user_{a_id[0]}'))
                     cur.execute(query)
                     start_time = cur.fetchone()
-                    #print(start_time)
                     if start_time != None:
                         now_time = datetime.datetime.now().replace(microsecond=0)
                         duration = now_time - start_time[0]

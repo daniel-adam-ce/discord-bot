@@ -74,7 +74,6 @@ class voice_db_commands_slash(commands.Cog):
                 total_time = total_time - datetime.timedelta(microseconds=total_time.microseconds)
                 # https://stackoverflow.com/questions/18470627/how-do-i-remove-the-microseconds-from-a-timedelta-object
                 a_id = times[1]
-                # query = sql.SQL('SELECT count(*) from {table}').format(table = sql.Identifier(f'user_{a_id}'))
                 query = sql.SQL((
                     "SELECT AVG(duration), PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY duration),"
                     "AVG(EXTRACT(HOUR FROM start_time)),"
@@ -103,7 +102,6 @@ class voice_db_commands_slash(commands.Cog):
                 colour = discord.Colour.blurple(), 
             )
 
-            # print(time, type(time))
             embed.set_author(name = 'Daniel Adam', icon_url = self.image_url)
             embed.add_field(name= "User", value=f'{member.mention}', inline=True)
             embed.add_field(name="First record", value = f'{first_record} PST', inline = True)
