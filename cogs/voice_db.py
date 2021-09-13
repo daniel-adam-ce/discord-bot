@@ -16,7 +16,7 @@ class voice_db(commands.Cog):
 
     @commands.Cog.listener('on_voice_state_update')
     async def detector(self, member, before, after):
-        print(member.id, before.channel, after.channel)
+        
         
         con = connect.connect()
         cur = con.cursor()
@@ -25,6 +25,7 @@ class voice_db(commands.Cog):
         id_exists = cur.fetchone()
 
         if before.channel == None and after.channel != None:
+            print(datetime.datetime.now().replace(microsecond=0), member.display_name, before.channel, after.channel)
             if (id_exists is None):
                 cur.execute('INSERT INTO users (discord_id) VALUES (%s)', (member.id, ))
 
@@ -46,6 +47,7 @@ class voice_db(commands.Cog):
                 cur.execute(query, (time,))
 
         elif after.channel == None and before.channel != None: 
+            print(datetime.datetime.now().replace(microsecond=0), member.display_name, before.channel, after.channel)
             cur.execute('SELECT anon_id FROM users WHERE discord_id = %s', (member.id, ))
             a_id = cur.fetchone()
             if a_id != None:
