@@ -32,7 +32,7 @@ class check_session_slash(commands.Cog):
                 name = "member",
                 description= "Optional: select a specific member to check.",
                 option_type = 6,
-                required = False
+                required = True
             )
         ]
     )
